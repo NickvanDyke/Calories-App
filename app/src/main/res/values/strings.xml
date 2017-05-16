@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Calories To Exercise</string>
+    <string name="calorieEntryHint">calories</string>
+</resources>
