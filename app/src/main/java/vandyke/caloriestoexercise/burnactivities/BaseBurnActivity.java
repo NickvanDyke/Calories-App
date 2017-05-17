@@ -1,6 +1,6 @@
 package vandyke.caloriestoexercise.burnactivities;
 
-import vandyke.caloriestoexercise.SettingsActivity;
+import vandyke.caloriestoexercise.MainActivity;
 
 public abstract class BaseBurnActivity {
     /** the metabolic equivalent of task for this BurnActivity
@@ -18,11 +18,15 @@ public abstract class BaseBurnActivity {
      * @param desiredCaloriesBurned the number of calories to be burned
      */
     public void calcRequiredMins(int desiredCaloriesBurned) {
-        requiredMins = desiredCaloriesBurned / (MET * 3.5 * SettingsActivity.weight / 200);
+        requiredMins = desiredCaloriesBurned / (MET * 3.5 * MainActivity.weight / 200);
+        System.out.println(MainActivity.weight);
     }
 
-    /** called when units are changed from imperial to metric, or vice versa */
-    public void changeUnits() {
+    /** called when units are set
+     *
+     * @param units the type of units to set to (i.e. imperial or metric)
+     */
+    public void setUnits(String units) {
 
     }
 

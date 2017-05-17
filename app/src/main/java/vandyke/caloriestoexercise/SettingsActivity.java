@@ -1,29 +1,28 @@
 package vandyke.caloriestoexercise;
 
-import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import static vandyke.caloriestoexercise.SettingsActivity.UNITS.IMPERIAL;
-
 public class SettingsActivity extends AppCompatActivity {
-    public enum UNITS {
-        IMPERIAL, METRIC
-    }
-    public static UNITS units = IMPERIAL;
-    public static int weight = 200;
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+        // set xml-defined toolbar as the actionbar
         setSupportActionBar((Toolbar)findViewById(R.id.toolbar));
 
         // enable up arrow
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        // display SettingsFragment as the main content
+        getFragmentManager().beginTransaction().replace(R.id.preferences_frame, new SettingsFragment()).commit();
     }
 
     @Override

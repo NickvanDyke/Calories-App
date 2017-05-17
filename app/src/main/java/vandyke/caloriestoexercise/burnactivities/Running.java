@@ -1,8 +1,6 @@
 package vandyke.caloriestoexercise.burnactivities;
 
-import vandyke.caloriestoexercise.SettingsActivity;
-
-import static vandyke.caloriestoexercise.SettingsActivity.UNITS.IMPERIAL;
+import vandyke.caloriestoexercise.MainActivity;
 
 public class Running extends BaseBurnActivity {
 
@@ -11,11 +9,11 @@ public class Running extends BaseBurnActivity {
         setMessage();
     }
 
-    public void notifyUnitsChange() {
+    public void setUnits(String units) {
         setMessage();
     }
 
     public void setMessage() {
-        message = SettingsActivity.units == IMPERIAL ? "Run at 6 MPH (10min/mile) for %.2f minutes" : "Run at 9.656 KPH (6.213min/mile) for %.2f minutes";
+        message = MainActivity.units.equals("imperial") ? "Run at 6 MPH (10min/mile) for %.2f minutes" : "Run at 9.656 KPH (6.213min/mile) for %.2f minutes";
     }
 }
