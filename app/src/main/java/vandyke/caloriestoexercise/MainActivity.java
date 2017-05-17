@@ -3,6 +3,7 @@ package vandyke.caloriestoexercise;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.*;
@@ -21,6 +22,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // set the toolbar
+        setSupportActionBar((Toolbar)findViewById(R.id.toolbar));
 
         // create and add BaseBurnActivity
         burnActivities = new ArrayList<>();
@@ -79,9 +83,5 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_actionbar, menu);
         return true;
-    }
-
-    public void openSettings(View view) {
-
     }
 }
