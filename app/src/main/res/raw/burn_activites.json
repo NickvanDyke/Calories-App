@@ -1,12 +1,10 @@
 {
   "Running": {
-    "MET": 9.8,
-    "displayString": "Run at 6 MPH for %.2f minutes",
-    "displayStringMetric": "Run at 9.656 KPH for %.2f minutes"
+    "name": "Running, 6 MPH",
+    "MET": 9.8
   },
   "Sitting": {
-    "MET": 1,
-    "displayString": "Sit for %.2f minutes",
-    "displayStringMetric": "Sit for %.2f minutes"
+    "name": "Sitting",
+    "MET": 1
   }
 }

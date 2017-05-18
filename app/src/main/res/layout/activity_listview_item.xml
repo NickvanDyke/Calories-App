@@ -1,12 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-          android:id="@+id/label"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:padding="10dip"
-          android:textSize="16dip"
-          android:textStyle="bold"
-          android:textColor="@android:color/black"
-          android:textAlignment="center"
-          android:contentDescription="hi">
-</TextView>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+    <TextView android:id="@+id/activityName"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_alignParentStart="true"
+              android:layout_alignParentLeft="true"
+              android:textSize="22sp"
+              android:textColor="#000000"
+              android:padding="5dp"
+            />
+
+    <TextView android:id="@+id/activityMinutes"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_alignParentEnd="true"
+              android:layout_alignParentRight="true"
+              android:textSize="22sp"
+              android:textColor="#000000"
+              android:padding="5dp"
+            />
+</RelativeLayout>

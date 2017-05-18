@@ -56,17 +56,15 @@ public class MainActivity extends AppCompatActivity {
             Iterator<String> iter = json.keys();
             while (iter.hasNext()) {
                 JSONObject burnActivity = json.getJSONObject(iter.next());
-                burnActivities.add(new BurnActivity(burnActivity.getInt("MET"), burnActivity.getString("displayString"), burnActivity.getString("displayStringMetric")));
+                burnActivities.add(new BurnActivity(burnActivity.getString("name"), burnActivity.getInt("MET")));
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        System.out.println(json);
-
 
         // set up listView stuff
         ListView listView = (ListView)findViewById(R.id.burnActivitiesList);
-        adapter = new ArrayAdapter<>(this, R.layout.activity_listview_item, burnActivities);
+        adapter = new BurnActivityAdapter(this, R.layout.activity_listview_item, burnActivities);
         listView.setAdapter(adapter);
 
         // update listView stuff when the entered number changes
@@ -95,15 +93,12 @@ public class MainActivity extends AppCompatActivity {
                         switch (key) {
                             case "units":
                                 units = prefs.getString("units", "imperial");
-                                if (weight != weightinKg) // units were previously set to imperial and are now metric
-                                    weightinKg = weight;
-                                else // units were previously metric and are now imperial
-                                    weightinKg = weight * 0.45359237;
-                                updateUnits();
+                                setWeightInKg();
+                                updateRequiredMins();
                                 break;
                             case "weight":
                                 weight = Double.parseDouble(prefs.getString("weight", "200"));
-                                weightinKg = units.equals("imperial") ? weight * 0.45359237 : weight;
+                                setWeightInKg();
                                 updateRequiredMins();
                                 break;
                         }
@@ -122,10 +117,9 @@ public class MainActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
     }
 
-    public void updateUnits() {
-        for (BurnActivity burn : burnActivities)
-            burn.setUnits(units);
-        updateRequiredMins();
+    public void setWeightInKg() {
+        weightinKg = units.equals("imperial") ? weight * 0.45359237 : weight;
+
     }
 
     @Override

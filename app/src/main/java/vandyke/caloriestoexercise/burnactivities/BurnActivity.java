@@ -5,17 +5,15 @@ import vandyke.caloriestoexercise.MainActivity;
 public class BurnActivity {
     /** the metabolic equivalent of task for this BurnActivity
      *  many MET values are taken from https://sites.google.com/site/compendiumofphysicalactivities/home */
-    protected double MET;
+    public double MET;
     /** the minutes this activity must be done for to burn the desired number of calories */
-    protected double requiredMins;
-    /** the displayString displayed for this BurnActivity in listView */
-    protected String displayString;
-    protected String displayStringMetric;
+    public double requiredMins;
+    /** the name displayed for this BurnActivity in listView */
+    public String name;
 
-    public BurnActivity(double MET, String displayString, String displayStringMetric) {
+    public BurnActivity(String name, double MET) {
+        this.name = name;
         this.MET = MET;
-        this.displayString = displayString;
-        this.displayStringMetric = displayStringMetric;
     }
 
     /**
@@ -33,9 +31,5 @@ public class BurnActivity {
      */
     public void setUnits(String units) {
 
-    }
-
-    public String toString() {
-        return String.format(MainActivity.units.equals("imperial") ? displayString : displayStringMetric, requiredMins);
     }
 }
