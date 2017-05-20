@@ -50,6 +50,10 @@ public class BurnActivityAdapter extends ArrayAdapter<BurnActivity> {
         return row;
     }
 
+    public ArrayList<BurnActivity> getData() {
+        return data;
+    }
+
     static class BurnActivityHolder {
         TextView activityName;
         TextView activityMinutes;

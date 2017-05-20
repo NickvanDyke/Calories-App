@@ -9,10 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.*;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.ListView;
-import org.json.JSONArray;
+import android.widget.*;
 import org.json.JSONException;
 import org.json.JSONObject;
 import vandyke.caloriestoexercise.burnactivities.BurnActivity;
@@ -20,16 +17,17 @@ import vandyke.caloriestoexercise.burnactivities.BurnActivity;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
 public class MainActivity extends AppCompatActivity {
-    private ArrayList<BurnActivity> burnActivities;
+    private HashMap<String, ArrayList<BurnActivity>> categoriesMap;
 
     public static String units;
     public static double weight;
     public static double weightinKg;
 
-    ArrayAdapter adapter;
+    BurnActivityAdapter listAdapter;
     EditText calorieEntry;
 
     SharedPreferences.OnSharedPreferenceChangeListener listener;
@@ -51,12 +49,19 @@ public class MainActivity extends AppCompatActivity {
         // parse the JSON and add BurnActivities
         JSONObject json = null;
         try {
+            categoriesMap = new HashMap<>();
             json = new JSONObject(loadJSONFromRaw(R.raw.burn_activites));
-            burnActivities = new ArrayList<>();
-            Iterator<String> iter = json.keys();
-            while (iter.hasNext()) {
-                JSONObject burnActivity = json.getJSONObject(iter.next());
-                burnActivities.add(new BurnActivity(burnActivity.getString("name"), burnActivity.getInt("MET")));
+            Iterator<String> categoryIter = json.keys();
+            while (categoryIter.hasNext()) {
+                ArrayList<BurnActivity> category = new ArrayList<>();
+                String categoryName = categoryIter.next();
+                JSONObject categoryJSON = json.getJSONObject(categoryName);
+                Iterator<String> nameIter = categoryJSON.keys();
+                while (nameIter.hasNext()) {
+                    String name = nameIter.next();
+                    category.add(new BurnActivity(name, categoryJSON.getInt(name)));
+                }
+                categoriesMap.put(categoryName, category);
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -64,8 +69,27 @@ public class MainActivity extends AppCompatActivity {
 
         // set up listView stuff
         ListView listView = (ListView)findViewById(R.id.burnActivitiesList);
-        adapter = new BurnActivityAdapter(this, R.layout.activity_listview_item, burnActivities);
-        listView.setAdapter(adapter);
+        listAdapter = new BurnActivityAdapter(this, R.layout.activity_listview_item, categoriesMap.values().iterator().next());
+        listView.setAdapter(listAdapter);
+
+        // set up spinner stuff
+        Spinner categorySpinner = (Spinner)findViewById(R.id.spinner);
+        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this, R.array.categories_entries, android.R.layout.simple_spinner_item);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        categorySpinner.setAdapter(spinnerAdapter);
+        categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                listAdapter.clear();
+                listAdapter.addAll(categoriesMap.get(((TextView)view).getText().toString().toLowerCase().replace("&", "and")));
+                listAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         // update listView stuff when the entered number changes
         calorieEntry = (EditText)findViewById(R.id.calorieEntry);
@@ -112,9 +136,9 @@ public class MainActivity extends AppCompatActivity {
         String cals = calorieEntry.getText().toString();
         if (!cals.equals(""))
             numCals = Integer.parseInt(cals);
-        for (BurnActivity activity : burnActivities)
+        for (BurnActivity activity : listAdapter.getData())
             activity.calcRequiredMins(numCals);
-        adapter.notifyDataSetChanged();
+        listAdapter.notifyDataSetChanged();
     }
 
     public void setWeightInKg() {
@@ -134,7 +158,6 @@ public class MainActivity extends AppCompatActivity {
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.
                 return super.onOptionsItemSelected(item);
-
         }
     }
 

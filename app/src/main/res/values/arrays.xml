@@ -8,4 +8,27 @@
         <item>imperial</item>
         <item>metric</item>
     </string-array>
+    <string-array name="categories_entries">
+        <item>Bicycling</item>
+        <item>Conditioning Exercise</item>
+        <item>Dancing</item>
+        <item>Fishing &amp; Hunting</item>
+        <item>Home Activities</item>
+        <item>Home Repair</item>
+        <item>Inactivity Quiet/Light</item>
+        <item>Lawn &amp; Garden</item>
+        <item>Miscellaneous</item>
+        <item>Music Playing</item>
+        <item>Occupation</item>
+        <item>Running</item>
+        <item>Self Care</item>
+        <item>Sexual Activity</item>
+        <item>Sports</item>
+        <item>Transportation</item>
+        <item>Walking</item>
+        <item>Water Activities</item>
+        <item>Winter Activities</item>
+        <item>Religious Activities</item>
+        <item>Volunteer Activities</item>
+    </string-array>
 </resources>
