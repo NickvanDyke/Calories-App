@@ -47,7 +47,7 @@ public class BurnActivityAdapter extends ArrayAdapter<BurnActivity> {
         if (MainActivity.enterCalories) {
             double minutes = burnActivity.calcRequiredMins(MainActivity.entryFieldValue);
             int minutesPart = (int) minutes;
-            holder.activityMinutes.setText(String.format("%dm %ds", minutesPart, (int) (60 * (minutes - minutesPart))));
+            holder.activityMinutes.setText(String.format("%d:%02d", minutesPart, (int) (60 * (minutes - minutesPart))));
         } else {
             holder.activityMinutes.setText(String.format("%.1f", burnActivity.calcBurnedCalories(MainActivity.entryFieldValue)));
         }

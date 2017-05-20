@@ -31,12 +31,4 @@ public class BurnActivity {
     public double calcBurnedCalories(double minutes) {
         return minutes * (MET * 3.5 * MainActivity.weightinKg / 200);
     }
-
-    /** called when units are set
-     *
-     * @param units the type of units to set to (i.e. imperial or metric)
-     */
-    public void setUnits(String units) {
-
-    }
 }

@@ -12,5 +12,6 @@
             android:title="Weight"
             android:inputType="number"
             android:gravity="center"
+            android:maxLength="3"
             />
 </PreferenceScreen>

@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
                 Iterator<String> nameIter = categoryJSON.keys();
                 while (nameIter.hasNext()) {
                     String name = nameIter.next();
-                    category.add(new BurnActivity(name, categoryJSON.getInt(name)));
+                    category.add(new BurnActivity(name, categoryJSON.getDouble(name)));
                 }
                 categoriesMap.put(categoryName, category);
             }
