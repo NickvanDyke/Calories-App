@@ -19,7 +19,7 @@ public class BurnActivity {
      * and sets the requiredMins to it
      * @param desiredCaloriesBurned the number of calories to be burned
      */
-    public double calcRequiredMins(int desiredCaloriesBurned) {
+    public double calcRequiredMins(double desiredCaloriesBurned) {
         return desiredCaloriesBurned / (MET * 3.5 * MainActivity.weightinKg / 200);
     }
 
@@ -28,8 +28,8 @@ public class BurnActivity {
      * sets
      * @param minutes the number of minutes the activity was performed for
      */
-    public void calcBurnedCalories(int minutes) {
-
+    public double calcBurnedCalories(double minutes) {
+        return minutes * (MET * 3.5 * MainActivity.weightinKg / 200);
     }
 
     /** called when units are set

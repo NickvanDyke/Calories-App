@@ -27,7 +27,8 @@ public class MainActivity extends AppCompatActivity {
     public static double weight;
     public static double weightinKg;
 
-    public static int entryFieldValue;
+    public static double entryFieldValue;
+    public static boolean enterCalories;
 
     private BurnActivityAdapter listAdapter;
     private EditText entryField;
@@ -38,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        enterCalories = true;
 
         // load preferences
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -104,13 +107,30 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String cals = entryField.getText().toString();
-                entryFieldValue = cals.equals("") ? 0 : Integer.parseInt(cals);
+                entryFieldValue = cals.equals("") ? 0 : Double.parseDouble(cals);
                 listAdapter.notifyDataSetChanged();
             }
 
             @Override
             public void afterTextChanged(Editable s) {
 
+            }
+        });
+
+        // change text and list when button is pressed to change from entering calories to minutes
+        ToggleButton button = (ToggleButton)findViewById(R.id.toggleButton);
+        button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    entryField.setHint("minutes");
+                    ((TextView)findViewById(R.id.rightLabel)).setText("Calories");
+                    enterCalories = false;
+                } else {
+                    entryField.setHint("calories");
+                    ((TextView)findViewById(R.id.rightLabel)).setText("Time");
+                    enterCalories = true;
+                }
+                listAdapter.notifyDataSetChanged();
             }
         });
 
