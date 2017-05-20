@@ -27,8 +27,10 @@ public class MainActivity extends AppCompatActivity {
     public static double weight;
     public static double weightinKg;
 
-    BurnActivityAdapter listAdapter;
-    EditText calorieEntry;
+    public static int entryFieldValue;
+
+    private BurnActivityAdapter listAdapter;
+    private EditText entryField;
 
     SharedPreferences.OnSharedPreferenceChangeListener listener;
 
@@ -69,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
 
         // set up listView stuff
         ListView listView = (ListView)findViewById(R.id.burnActivitiesList);
-        listAdapter = new BurnActivityAdapter(this, R.layout.activity_listview_item, categoriesMap.values().iterator().next());
+        listAdapter = new BurnActivityAdapter(this, R.layout.activity_listview_item, new ArrayList<BurnActivity>());
         listView.setAdapter(listAdapter);
 
         // set up spinner stuff
@@ -92,8 +94,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // update listView stuff when the entered number changes
-        calorieEntry = (EditText)findViewById(R.id.calorieEntry);
-        calorieEntry.addTextChangedListener(new TextWatcher() {
+        entryField = (EditText)findViewById(R.id.entryField);
+        entryField.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -101,7 +103,9 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                updateRequiredMins();
+                String cals = entryField.getText().toString();
+                entryFieldValue = cals.equals("") ? 0 : Integer.parseInt(cals);
+                listAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -118,12 +122,12 @@ public class MainActivity extends AppCompatActivity {
                             case "units":
                                 units = prefs.getString("units", "imperial");
                                 setWeightInKg();
-                                updateRequiredMins();
+                                listAdapter.notifyDataSetChanged();
                                 break;
                             case "weight":
                                 weight = Double.parseDouble(prefs.getString("weight", "200"));
                                 setWeightInKg();
-                                updateRequiredMins();
+                                listAdapter.notifyDataSetChanged();
                                 break;
                         }
                     }
@@ -131,19 +135,8 @@ public class MainActivity extends AppCompatActivity {
         prefs.registerOnSharedPreferenceChangeListener(listener);
     }
 
-    public void updateRequiredMins() {
-        int numCals = 0;
-        String cals = calorieEntry.getText().toString();
-        if (!cals.equals(""))
-            numCals = Integer.parseInt(cals);
-        for (BurnActivity activity : listAdapter.getData())
-            activity.calcRequiredMins(numCals);
-        listAdapter.notifyDataSetChanged();
-    }
-
     public void setWeightInKg() {
         weightinKg = units.equals("imperial") ? weight * 0.45359237 : weight;
-
     }
 
     @Override
@@ -163,6 +156,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        //inflate the actionbar with the stuff in the xml file for it
         getMenuInflater().inflate(R.menu.main_actionbar, menu);
         return true;
     }

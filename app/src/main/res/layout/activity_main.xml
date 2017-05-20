@@ -29,7 +29,7 @@
             android:inputType="number"
             android:gravity="center"
             android:ems="10"
-            android:id="@+id/calorieEntry"
+            android:id="@+id/entryField"
             android:hint="@string/calorieEntryHint"
             android:textAlignment="center" android:textSize="36sp" android:fontFamily="sans-serif"
             android:layout_height="60dp"
@@ -61,7 +61,7 @@
             android:layout_marginLeft="8dp"
             android:textAllCaps="false"
             android:textStyle="normal|bold"
-            app:layout_constraintTop_toBottomOf="@+id/calorieEntry"
+            app:layout_constraintTop_toBottomOf="@+id/entryField"
             android:layout_marginTop="8dp"/>
 
     <TextView
@@ -79,12 +79,21 @@
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:id="@+id/spinner"
-            android:layout_marginTop="16dp"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar"
             app:layout_constraintRight_toRightOf="parent"
             android:layout_marginStart="16dp"
-            app:layout_constraintLeft_toRightOf="@+id/calorieEntry"
+            app:layout_constraintLeft_toRightOf="@+id/entryField"
             android:layout_marginLeft="16dp"
-            app:layout_constraintBottom_toBottomOf="@+id/calorieEntry"/>
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"/>
+
+    <ToggleButton
+            android:text="ToggleButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/toggleButton"
+            android:textOff="Calories"
+            android:textOn="Minutes"
+            app:layout_constraintTop_toBottomOf="@+id/spinner"
+            app:layout_constraintLeft_toLeftOf="@+id/spinner"
+            android:checked="false"/>
 
 </android.support.constraint.ConstraintLayout>

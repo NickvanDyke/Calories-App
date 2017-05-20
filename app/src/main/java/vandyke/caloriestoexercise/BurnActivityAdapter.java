@@ -14,9 +14,9 @@ import java.util.ArrayList;
 
 public class BurnActivityAdapter extends ArrayAdapter<BurnActivity> {
 
-    Context context;
-    int layoutResourceId;
-    ArrayList<BurnActivity> data;
+    private Context context;
+    private int layoutResourceId;
+    private ArrayList<BurnActivity> data;
 
     public BurnActivityAdapter(Context context, int layoutResourceId, ArrayList<BurnActivity> data) {
         super(context, layoutResourceId, data);
@@ -44,8 +44,9 @@ public class BurnActivityAdapter extends ArrayAdapter<BurnActivity> {
 
         BurnActivity burnActivity = data.get(position);
         holder.activityName.setText(burnActivity.name);
-        int minutes = (int)burnActivity.requiredMins;
-        holder.activityMinutes.setText(String.format("%dm %ds", minutes, (int)(60 * (burnActivity.requiredMins - minutes))));
+        double minutes = burnActivity.calcRequiredMins(MainActivity.entryFieldValue);
+        int minutesPart = (int)minutes;
+        holder.activityMinutes.setText(String.format("%dm %ds", minutesPart, (int)(60 * (minutes - minutesPart))));
 
         return row;
     }
