@@ -12,7 +12,6 @@ import android.view.*;
 import android.widget.*;
 import org.json.JSONException;
 import org.json.JSONObject;
-import vandyke.caloriestoexercise.burnactivities.BurnActivity;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,16 +23,17 @@ public class MainActivity extends AppCompatActivity {
     private HashMap<String, ArrayList<BurnActivity>> categoriesMap;
 
     public static String units;
-    public static double weight;
-    public static double weightinKg;
+    public static float weight;
+    public static float weightinKg;
 
-    public static double entryFieldValue;
+    public static float entryFieldValue;
     public static boolean enterCalories;
 
     private BurnActivityAdapter listAdapter;
     private EditText entryField;
 
-    SharedPreferences.OnSharedPreferenceChangeListener listener;
+    public static SharedPreferences prefs;
+    private SharedPreferences.OnSharedPreferenceChangeListener listener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,19 +43,18 @@ public class MainActivity extends AppCompatActivity {
         enterCalories = true;
 
         // load preferences
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
         units = prefs.getString("units", "imperial");
-        weight = Double.parseDouble(prefs.getString("weight", "200"));
-        weightinKg = units.equals("imperial") ? weight * 0.45359237 : weight;
+        weight = prefs.getFloat("weight", 200);
+        setWeightInKg();
 
         // set the toolbar as this activity's actionbar
         setSupportActionBar((Toolbar)findViewById(R.id.toolbar));
 
         // parse the JSON and add BurnActivities
-        JSONObject json = null;
         try {
             categoriesMap = new HashMap<>();
-            json = new JSONObject(loadJSONFromRaw(R.raw.burn_activites));
+            JSONObject json = new JSONObject(loadJSONFromRaw(R.raw.burn_activites));
             Iterator<String> categoryIter = json.keys();
             while (categoryIter.hasNext()) {
                 ArrayList<BurnActivity> category = new ArrayList<>();
@@ -74,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
         // set up listView stuff
         ListView listView = (ListView)findViewById(R.id.burnActivitiesList);
-        listAdapter = new BurnActivityAdapter(this, R.layout.activity_listview_item, new ArrayList<BurnActivity>());
+        listAdapter = new BurnActivityAdapter(this, R.layout.activity_listview_item, categoriesMap.get("bicycling"));
         listView.setAdapter(listAdapter);
 
         // set up spinner stuff
@@ -85,8 +84,12 @@ public class MainActivity extends AppCompatActivity {
         categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                listAdapter.clear();
-                listAdapter.addAll(categoriesMap.get(((TextView)view).getText().toString().toLowerCase().replace("&", "and")));
+                System.out.println("hi");
+                if (view == null) {
+                    System.out.println("VIEW WAS NULL");
+                    return; // TODO: not sure why view is sometimes null upon restart... try to figure out I guess. But this fixes crashes for now
+                }
+                listAdapter.setData(categoriesMap.get(((TextView)view).getText().toString().toLowerCase().replace("&", "and")));
                 listAdapter.notifyDataSetChanged();
             }
 
@@ -107,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String cals = entryField.getText().toString();
-                entryFieldValue = cals.equals("") ? 0 : Double.parseDouble(cals);
+                entryFieldValue = cals.equals("") ? 0 : Float.parseFloat(cals);
                 listAdapter.notifyDataSetChanged();
             }
 
@@ -145,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
                                 listAdapter.notifyDataSetChanged();
                                 break;
                             case "weight":
-                                weight = Double.parseDouble(prefs.getString("weight", "200"));
+                                weight = prefs.getFloat("weight", 200);
                                 setWeightInKg();
                                 listAdapter.notifyDataSetChanged();
                                 break;
@@ -156,16 +159,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setWeightInKg() {
-        weightinKg = units.equals("imperial") ? weight * 0.45359237 : weight;
+        weightinKg = units.equals("imperial") ? weight * 0.45359237f : weight;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_settings:
-                // launch settings activity
-                Intent intent = new Intent(this, SettingsActivity.class);
-                startActivity(intent);
+                WeightDialog.createAndShow(getSupportFragmentManager());
                 return true;
             default:
                 // If we got here, the user's action was not recognized.

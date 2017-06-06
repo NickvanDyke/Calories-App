@@ -1,4 +1,4 @@
-package vandyke.caloriestoexercise.burnactivities;
+package vandyke.caloriestoexercise;
 
 import vandyke.caloriestoexercise.MainActivity;
 

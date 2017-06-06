@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                             xmlns:app="http://schemas.android.com/apk/res-auto"
+                                             android:orientation="vertical"
+                                             android:layout_width="match_parent"
+                                             android:layout_height="match_parent">
+
+    <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/weightField"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:hint="Weight"
+            android:textAlignment="center"
+            android:maxLength="3"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"/>
+
+    <Spinner
+            android:layout_height="48dp"
+            android:id="@+id/unitsSpinner"
+            app:layout_constraintLeft_toRightOf="@+id/weightField"
+            android:layout_width="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/weightField"
+            android:entries="@array/units_entries"/>
+</android.support.constraint.ConstraintLayout>

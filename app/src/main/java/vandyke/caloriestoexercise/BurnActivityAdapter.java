@@ -7,8 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-import org.w3c.dom.Text;
-import vandyke.caloriestoexercise.burnactivities.BurnActivity;
 
 import java.util.ArrayList;
 
@@ -35,7 +33,7 @@ public class BurnActivityAdapter extends ArrayAdapter<BurnActivity> {
 
             holder = new BurnActivityHolder();
             holder.activityName = (TextView)row.findViewById(R.id.activityName);
-            holder.activityMinutes = (TextView)row.findViewById(R.id.activityMinutes);
+            holder.activityValue = (TextView)row.findViewById(R.id.activityValue);
 
             row.setTag(holder);
         } else {
@@ -47,9 +45,9 @@ public class BurnActivityAdapter extends ArrayAdapter<BurnActivity> {
         if (MainActivity.enterCalories) {
             double minutes = burnActivity.calcRequiredMins(MainActivity.entryFieldValue);
             int minutesPart = (int) minutes;
-            holder.activityMinutes.setText(String.format("%d:%02d", minutesPart, (int) (60 * (minutes - minutesPart))));
+            holder.activityValue.setText(String.format("%dm %02ds", minutesPart, (int) (60 * (minutes - minutesPart))));
         } else {
-            holder.activityMinutes.setText(String.format("%.1f", burnActivity.calcBurnedCalories(MainActivity.entryFieldValue)));
+            holder.activityValue.setText(String.format("%.1f", burnActivity.calcBurnedCalories(MainActivity.entryFieldValue)));
         }
 
         return row;
@@ -59,8 +57,12 @@ public class BurnActivityAdapter extends ArrayAdapter<BurnActivity> {
         return data;
     }
 
+    public void setData(ArrayList<BurnActivity> data) {
+        this.data = data;
+    }
+
     static class BurnActivityHolder {
         TextView activityName;
-        TextView activityMinutes;
+        TextView activityValue;
     }
 }

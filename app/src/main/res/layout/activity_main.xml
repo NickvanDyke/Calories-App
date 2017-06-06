@@ -25,7 +25,6 @@
             />
 
     <EditText
-            android:layout_width="134dp"
             android:inputType="numberDecimal"
             android:gravity="center"
             android:ems="10"
@@ -38,7 +37,8 @@
             app:layout_constraintTop_toBottomOf="@+id/toolbar"
             android:layout_marginStart="16dp"
             app:layout_constraintLeft_toLeftOf="parent"
-            android:layout_marginLeft="16dp"/>
+            android:layout_marginLeft="16dp"
+            android:layout_width="138dp"/>
     <ListView
             android:layout_width="0dp"
             android:layout_height="0dp"
