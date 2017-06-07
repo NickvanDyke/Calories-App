@@ -24,18 +24,21 @@ import java.util.*;
 public class MainActivity extends AppCompatActivity {
     private HashMap<String, ArrayList<BurnActivity>> categoriesMap;
 
-    public static String units;
-    public static float weight;
-    public static float weightinKg;
+    public String units;
+    public float weight;
+    public float weightinKg;
 
-    public static float entryFieldValue;
-    public static boolean enterCalories;
+    public String category;
+
+    public float entryFieldValue;
+    public boolean enterCalories;
 
     private BurnActivityAdapter listAdapter;
     private EditText entryField;
     private ArrayList<BurnActivity> allActivites;
+    public boolean searching;
 
-    public static SharedPreferences prefs;
+    public SharedPreferences prefs;
     private SharedPreferences.OnSharedPreferenceChangeListener listener;
 
     @Override
@@ -44,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         enterCalories = true;
+        searching = false;
 
         // load preferences
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -75,34 +79,29 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // set up listView stuff
-        ListView listView = (ListView)findViewById(R.id.burnActivitiesList);
+        final ListView listView = (ListView)findViewById(R.id.burnActivitiesList);
         listAdapter = new BurnActivityAdapter(this, R.layout.burnactivity_listview_item, categoriesMap.get("bicycling"));
         listView.setAdapter(listAdapter);
 
         // set up spinner stuff
-        Spinner categorySpinner = (Spinner)findViewById(R.id.spinner);
+        final Spinner categorySpinner = (Spinner)findViewById(R.id.spinner);
         ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this, R.array.categories_entries, android.R.layout.simple_spinner_item);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         categorySpinner.setAdapter(spinnerAdapter);
         categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                System.out.println("hi");
                 if (view == null) {
-                    System.out.println("VIEW WAS NULL");
+                    category = "all"; // need to set manually in this case
+                    categorySpinner.setSelection(0);
                     return; // TODO: not sure why view is sometimes null upon restart... try to figure out I guess. But this fixes crashes for now
                 }
-                String selected = ((TextView)view).getText().toString().toLowerCase().replace("&", "and");
-                if (selected.equals("all")) {
-                    if (allActivites == null) { // TODO: maybe optimize this more, idk
-                        allActivites = new ArrayList<>();
-                        for (ArrayList<BurnActivity> list : categoriesMap.values())
-                            allActivites.addAll(list);
-                        Collections.sort(allActivites);
-                    }
-                    listAdapter.setData(allActivites);
-                } else
-                    listAdapter.setData(categoriesMap.get(selected));
-                listAdapter.notifyDataSetChanged();
+                category = ((TextView)view).getText().toString().toLowerCase().replace("&", "and");
+                listAdapter.setData(getListData());
+                System.out.println(searching);
+                if (searching)
+                    listAdapter.filter();
+                else
+                    listAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -180,6 +179,20 @@ public class MainActivity extends AppCompatActivity {
         weightinKg = units.equals("Kilograms") ? weight * 0.45359237f : weight;
     }
 
+    public ArrayList<BurnActivity> getListData() {
+        if (category.equals("all")) {
+            if (allActivites == null) {
+                // TODO: maybe optimize this more, idk
+                allActivites = new ArrayList<>();
+                for (ArrayList<BurnActivity> list : categoriesMap.values())
+                    allActivites.addAll(list);
+                Collections.sort(allActivites);
+            }
+            return allActivites;
+        } else
+            return categoriesMap.get(category);
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -195,7 +208,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        //inflate the actionbar with the stuff in the xml file for it
         getMenuInflater().inflate(R.menu.main_actionbar, menu);
         SearchManager searchManager = (SearchManager)getSystemService(Context.SEARCH_SERVICE);
         final SearchView searchView = (SearchView)menu.findItem(R.id.action_search).getActionView();
@@ -207,13 +219,18 @@ public class MainActivity extends AppCompatActivity {
             }
 
             public boolean onQueryTextChange(String newText) {
-
+                listAdapter.filter(newText);
                 return false;
             }
         });
-        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
-            public boolean onClose() {
-                return false;
+        searchView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+            public void onViewAttachedToWindow(View v) {
+                searching = true;
+            }
+
+            public void onViewDetachedFromWindow(View v) {
+                listAdapter.setData(getListData());
+                searching = false;
             }
         });
         return true;
