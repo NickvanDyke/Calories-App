@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="units_entries">
-        <item>Imperial</item>
-        <item>Metric</item>
+        <item>Pounds</item>
+        <item>Kilograms</item>
     </string-array>
     <string-array name="categories_entries">
+        <item>All</item>
         <item>Bicycling</item>
         <item>Conditioning Exercise</item>
         <item>Dancing</item>

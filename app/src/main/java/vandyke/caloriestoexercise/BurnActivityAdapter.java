@@ -61,6 +61,11 @@ public class BurnActivityAdapter extends ArrayAdapter<BurnActivity> {
         this.data = data;
     }
 
+    @Override
+    public int getCount() {
+        return data.size();
+    }
+
     static class BurnActivityHolder {
         TextView activityName;
         TextView activityValue;

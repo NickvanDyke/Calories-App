@@ -28,6 +28,7 @@
             android:inputType="numberDecimal"
             android:gravity="center"
             android:ems="10"
+            android:imeOptions="actionDone"
             android:id="@+id/entryField"
             android:hint="@string/calorieEntryHint"
             android:textAlignment="center" android:textSize="36sp" android:fontFamily="sans-serif"

@@ -2,7 +2,7 @@ package vandyke.caloriestoexercise;
 
 import vandyke.caloriestoexercise.MainActivity;
 
-public class BurnActivity {
+public class BurnActivity implements Comparable {
     /** the metabolic equivalent of task for this BurnActivity
      *  many MET values are taken from https://sites.google.com/site/compendiumofphysicalactivities/home */
     public double MET;
@@ -15,8 +15,7 @@ public class BurnActivity {
     }
 
     /**
-     * calculates how many minutes this activity must be performed for, using the appropriate equation,
-     * and sets the requiredMins to it
+     * calculates how many minutes this activity must be performed for, using the appropriate equation
      * @param desiredCaloriesBurned the number of calories to be burned
      */
     public double calcRequiredMins(double desiredCaloriesBurned) {
@@ -24,11 +23,14 @@ public class BurnActivity {
     }
 
     /**
-     * calculates how many calories were burned from performing this activity for the given minutes, and then
-     * sets
+     * calculates how many calories were burned from performing this activity for the given minutes
      * @param minutes the number of minutes the activity was performed for
      */
     public double calcBurnedCalories(double minutes) {
         return minutes * (MET * 3.5 * MainActivity.weightinKg / 200);
+    }
+
+    public int compareTo(Object o) {
+        return name.compareTo(((BurnActivity)o).name);
     }
 }
